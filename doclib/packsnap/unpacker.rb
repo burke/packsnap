@@ -1,12 +1,12 @@
-module MessagePack
+module Packsnap
 
   #
-  # MessagePack::Unpacker is an interface to deserialize objects from an internal buffer,
-  # which is a MessagePack::Buffer.
+  # Packsnap::Unpacker is an interface to deserialize objects from an internal buffer,
+  # which is a Packsnap::Buffer.
   #
   class Unpacker
     #
-    # Creates a MessagePack::Unpacker instance.
+    # Creates a Packsnap::Unpacker instance.
     #
     # @overload initialize(options={})
     #   @param options [Hash]
@@ -25,7 +25,7 @@ module MessagePack
     #
     # Internal buffer
     #
-    # @return [MessagePack::Unpacker]
+    # @return [Packsnap::Unpacker]
     #
     attr_reader :buffer
 
@@ -33,8 +33,8 @@ module MessagePack
     # Deserializes an object from internal buffer and returns it.
     #
     # If there're not enough buffer, this method raises EOFError.
-    # If data format is invalid, this method raises MessagePack::MalformedFormatError.
-    # If the stack is too deep, this method raises MessagePack::StackError.
+    # If data format is invalid, this method raises Packsnap::MalformedFormatError.
+    # If the stack is too deep, this method raises Packsnap::StackError.
     #
     # @return [Object] deserialized object
     #
@@ -69,7 +69,7 @@ module MessagePack
     # Read a header of an array and returns its size.
     # It converts a serialized array into a stream of elements.
     #
-    # If the serialized object is not an array, it raises MessagePack::TypeError.
+    # If the serialized object is not an array, it raises Packsnap::TypeError.
     # If there're not enough buffer, this method raises EOFError.
     #
     # @return [Integer] size of the array
@@ -81,7 +81,7 @@ module MessagePack
     # Read a header of an map and returns its size.
     # It converts a serialized map into a stream of key-value pairs.
     #
-    # If the serialized object is not a map, it raises MessagePack::TypeError.
+    # If the serialized object is not a map, it raises Packsnap::TypeError.
     # If there're not enough buffer, this method raises EOFError.
     #
     # @return [Integer] size of the map

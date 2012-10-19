@@ -1,5 +1,4 @@
-
-module MessagePack
+module Packsnap
   #
   # Serializes an object into an IO or String.
   #

@@ -1,4 +1,4 @@
-module MessagePack
+module Packsnap
 
   class UnpackError < StandardError
   end

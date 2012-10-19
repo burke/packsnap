@@ -1,4 +1,4 @@
-require 'msgpack/version'
+require 'packsnap/version'
 
 here = File.expand_path(File.dirname(__FILE__))
 

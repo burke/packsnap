@@ -1,8 +1,8 @@
-module MessagePack
+module Packsnap
 
   class Buffer
     #
-    # Creates a MessagePack::Buffer instance.
+    # Creates a Packsnap::Buffer instance.
     #
     # @overload initialize(options={})
     #   @param options [Hash]

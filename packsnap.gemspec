@@ -1,20 +1,19 @@
 $:.push File.expand_path("../lib", __FILE__)
-require 'msgpack/version'
+require 'packsnap/version'
 
 Gem::Specification.new do |s|
-  s.name = "msgpack"
-  s.version = MessagePack::VERSION
+  s.name = "packsnap"
+  s.version = Packsnap::VERSION
   s.summary = "MessagePack, a binary-based efficient data interchange format."
   s.description = %q{MessagePack is a binary-based efficient object serialization library. It enables to exchange structured objects between many languages like JSON. But unlike JSON, it is very fast and small.}
-  s.author = "FURUHASHI Sadayuki"
-  s.email = "frsyuki@gmail.com"
-  s.homepage = "http://msgpack.org/"
-  s.rubyforge_project = "msgpack"
+  s.author = "Burke Libbey"
+  s.email = "burke@libbey.me"
+  s.homepage = "https://github.com/burke/packsnap"
   s.has_rdoc = false
   s.files = `git ls-files`.split("\n")
   s.test_files = `git ls-files -- {test,spec}/*`.split("\n")
   s.require_paths = ["lib"]
-  s.extensions = ['ext/msgpack/extconf.rb']
+  s.extensions = ['ext/packsnap/extconf.rb']
 
   s.add_development_dependency 'bundler', ['>= 1.0.0']
   s.add_development_dependency 'rake', ['>= 0.8.7']

@@ -1,12 +1,12 @@
-module MessagePack
+module Packsnap
 
   #
-  # MessagePack::Packer is an interface to serialize objects into an internal buffer,
-  # which is a MessagePack::Buffer.
+  # Packsnap::Packer is an interface to serialize objects into an internal buffer,
+  # which is a Packsnap::Buffer.
   #
   class Packer
     #
-    # Creates a MessagePack::Packer instance.
+    # Creates a Packsnap::Packer instance.
     # See Buffer#initialize for supported options.
     #
     # @overload initialize(options={})
@@ -24,7 +24,7 @@ module MessagePack
     #
     # Internal buffer
     #
-    # @return MessagePack::Unpacker
+    # @return Packsnap::Unpacker
     #
     attr_reader :buffer
 
