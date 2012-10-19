@@ -18,12 +18,14 @@
 #ifndef MSGPACK_RUBY_UNPACKER_CLASS_H__
 #define MSGPACK_RUBY_UNPACKER_CLASS_H__
 
-#include "unpacker.h"
+#include "unpacker.hh"
 
 extern VALUE cMessagePack_Unpacker;
 
+extern "C"
 void MessagePack_Unpacker_module_init(VALUE mMessagePack);
 
+extern "C"
 VALUE MessagePack_unpack(int argc, VALUE* argv);
 
 #endif

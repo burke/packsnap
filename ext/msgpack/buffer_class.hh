@@ -15,16 +15,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-#ifndef MSGPACK_RUBY_PACKER_CLASS_H__
-#define MSGPACK_RUBY_PACKER_CLASS_H__
+#ifndef MSGPACK_RUBY_BUFFER_CLASS_H__
+#define MSGPACK_RUBY_BUFFER_CLASS_H__
 
-#include "packer.h"
+#include "buffer.hh"
 
-extern VALUE cMessagePack_Packer;
+extern VALUE cMessagePack_Buffer;
 
-void MessagePack_Packer_module_init(VALUE mMessagePack);
+extern "C" void MessagePack_Buffer_module_init(VALUE mMessagePack);
 
-VALUE MessagePack_pack(int argc, VALUE* argv);
+extern "C" VALUE MessagePack_Buffer_wrap(msgpack_buffer_t* b, VALUE owner);
+
+void MessagePack_Buffer_initialize(msgpack_buffer_t* b, VALUE io, VALUE options);
 
 #endif
 

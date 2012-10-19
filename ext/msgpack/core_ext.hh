@@ -20,6 +20,7 @@
 
 #include "compat.h"
 
+extern "C"
 void MessagePack_core_ext_module_init();
 
 #endif

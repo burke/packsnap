@@ -89,7 +89,7 @@ void msgpack_packer_write_hash_value(msgpack_packer_t* pk, VALUE v)
     unsigned int len32 = (unsigned int)len;
     msgpack_packer_write_map_header(pk, len32);
 
-    rb_hash_foreach(v, write_hash_foreach, (VALUE) pk);
+    rb_hash_foreach(v, (int (*)(...))write_hash_foreach, (VALUE) pk);
 }
 
 static void _msgpack_packer_write_other_value(msgpack_packer_t* pk, VALUE v)

@@ -16,7 +16,7 @@
  *    limitations under the License.
  */
 
-#include "unpacker.h"
+#include "unpacker.hh"
 
 #define HEAD_BYTE_REQUIRED 0xc6
 
@@ -31,7 +31,7 @@ void msgpack_unpacker_init(msgpack_unpacker_t* uk)
     uk->last_object = Qnil;
     uk->reading_raw = Qnil;
 
-    uk->stack = calloc(MSGPACK_UNPACKER_STACK_CAPACITY, sizeof(msgpack_unpacker_stack_t));
+    uk->stack = (msgpack_unpacker_stack_t*)calloc(MSGPACK_UNPACKER_STACK_CAPACITY, sizeof(msgpack_unpacker_stack_t));
     uk->stack_capacity = MSGPACK_UNPACKER_STACK_CAPACITY;
 }
 

@@ -18,7 +18,7 @@
 #ifndef MSGPACK_RUBY_UNPACKER_H__
 #define MSGPACK_RUBY_UNPACKER_H__
 
-#include "buffer.h"
+#include "buffer.hh"
 
 #ifndef MSGPACK_UNPACKER_STACK_CAPACITY
 #define MSGPACK_UNPACKER_STACK_CAPACITY 128

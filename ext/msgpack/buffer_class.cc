@@ -18,8 +18,8 @@
 
 #include "compat.h"
 #include "ruby.h"
-#include "buffer.h"
-#include "buffer_class.h"
+#include "buffer.hh"
+#include "buffer_class.hh"
 
 VALUE cMessagePack_Buffer;
 
@@ -107,6 +107,7 @@ void MessagePack_Buffer_initialize(msgpack_buffer_t* b, VALUE io, VALUE options)
     }
 }
 
+extern "C"
 VALUE MessagePack_Buffer_wrap(msgpack_buffer_t* b, VALUE owner)
 {
     b->owner = owner;
@@ -205,10 +206,10 @@ static VALUE Buffer_append(VALUE self, VALUE string_or_buffer)
 
 static VALUE read_until_eof_rescue(VALUE args)
 {
-    msgpack_buffer_t* b = (void*) ((VALUE*) args)[0];
+    msgpack_buffer_t* b = (msgpack_buffer_t*) ((VALUE*) args)[0];
     VALUE out = ((VALUE*) args)[1];
     unsigned long max = ((VALUE*) args)[2];
-    size_t* sz = (void*) ((VALUE*) args)[3];
+    size_t* sz = (size_t*) ((VALUE*) args)[3];
 
     while(true) {
         size_t rl;
@@ -256,8 +257,8 @@ static inline size_t read_until_eof(msgpack_buffer_t* b, VALUE out, unsigned lon
     if(msgpack_buffer_has_io(b)) {
         size_t sz = 0;
         VALUE args[4] = { (VALUE)(void*) b, out, (VALUE) max, (VALUE)(void*) &sz };
-        rb_rescue2(read_until_eof_rescue, (VALUE)(void*) args,
-                read_until_eof_error, (VALUE)(void*) args,
+        rb_rescue2((VALUE (*)(...))read_until_eof_rescue, (VALUE)(void*) args,
+                (VALUE (*)(...))read_until_eof_error, (VALUE)(void*) args,
                 rb_eEOFError, NULL);
         return sz;
 
@@ -456,6 +457,7 @@ static VALUE Buffer_write_to(VALUE self, VALUE io)
     return ULONG2NUM(sz);
 }
 
+extern "C"
 void MessagePack_Buffer_module_init(VALUE mMessagePack)
 {
     s_read = rb_intern("read");
@@ -469,20 +471,20 @@ void MessagePack_Buffer_module_init(VALUE mMessagePack)
 
     rb_define_alloc_func(cMessagePack_Buffer, Buffer_alloc);
 
-    rb_define_method(cMessagePack_Buffer, "initialize", Buffer_initialize, -1);
-    rb_define_method(cMessagePack_Buffer, "clear", Buffer_clear, 0);
-    rb_define_method(cMessagePack_Buffer, "size", Buffer_size, 0);
-    rb_define_method(cMessagePack_Buffer, "empty?", Buffer_empty_p, 0);
-    rb_define_method(cMessagePack_Buffer, "write", Buffer_write, 1);
-    rb_define_method(cMessagePack_Buffer, "<<", Buffer_append, 1);
-    rb_define_method(cMessagePack_Buffer, "skip", Buffer_skip, 1);
-    rb_define_method(cMessagePack_Buffer, "skip_all", Buffer_skip_all, 1);
-    rb_define_method(cMessagePack_Buffer, "read", Buffer_read, -1);
-    rb_define_method(cMessagePack_Buffer, "read_all", Buffer_read_all, -1);
-    rb_define_method(cMessagePack_Buffer, "flush", Buffer_flush, 0);
-    rb_define_method(cMessagePack_Buffer, "write_to", Buffer_write_to, 1);
-    rb_define_method(cMessagePack_Buffer, "to_str", Buffer_to_str, 0);
+    rb_define_method(cMessagePack_Buffer, "initialize", (VALUE (*)(...))Buffer_initialize, -1);
+    rb_define_method(cMessagePack_Buffer, "clear", (VALUE (*)(...))Buffer_clear, 0);
+    rb_define_method(cMessagePack_Buffer, "size", (VALUE (*)(...))Buffer_size, 0);
+    rb_define_method(cMessagePack_Buffer, "empty?", (VALUE (*)(...))Buffer_empty_p, 0);
+    rb_define_method(cMessagePack_Buffer, "write", (VALUE (*)(...))Buffer_write, 1);
+    rb_define_method(cMessagePack_Buffer, "<<", (VALUE (*)(...))Buffer_append, 1);
+    rb_define_method(cMessagePack_Buffer, "skip", (VALUE (*)(...))Buffer_skip, 1);
+    rb_define_method(cMessagePack_Buffer, "skip_all", (VALUE (*)(...))Buffer_skip_all, 1);
+    rb_define_method(cMessagePack_Buffer, "read", (VALUE (*)(...))Buffer_read, -1);
+    rb_define_method(cMessagePack_Buffer, "read_all", (VALUE (*)(...))Buffer_read_all, -1);
+    rb_define_method(cMessagePack_Buffer, "flush", (VALUE (*)(...))Buffer_flush, 0);
+    rb_define_method(cMessagePack_Buffer, "write_to", (VALUE (*)(...))Buffer_write_to, 1);
+    rb_define_method(cMessagePack_Buffer, "to_str", (VALUE (*)(...))Buffer_to_str, 0);
     rb_define_alias(cMessagePack_Buffer, "to_s", "to_str");
-    rb_define_method(cMessagePack_Buffer, "to_a", Buffer_to_a, 0);
+    rb_define_method(cMessagePack_Buffer, "to_a", (VALUE (*)(...))Buffer_to_a, 0);
 }
 

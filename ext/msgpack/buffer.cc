@@ -16,7 +16,7 @@
  *    limitations under the License.
  */
 
-#include "buffer.h"
+#include "buffer.hh"
 #include "rmem.h"
 
 #ifdef RUBY_VM
@@ -250,7 +250,7 @@ static inline msgpack_buffer_chunk_t* _msgpack_buffer_alloc_new_chunk(msgpack_bu
 {
     msgpack_buffer_chunk_t* reuse = b->free_list;
     if(reuse == NULL) {
-        return malloc(sizeof(msgpack_buffer_chunk_t));
+        return (msgpack_buffer_chunk_t*)malloc(sizeof(msgpack_buffer_chunk_t));
     }
     b->free_list = b->free_list->next;
     return reuse;
@@ -349,7 +349,7 @@ static inline void* _msgpack_buffer_chunk_malloc(
 #endif
             /* alloc new rmem page */
             *allocated_size = MSGPACK_RMEM_PAGE_SIZE;
-            char* buffer = msgpack_rmem_alloc(&s_rmem);
+            char* buffer = (char*)msgpack_rmem_alloc(&s_rmem);
             c->mem = buffer;
 
             /* update rmem owner */
@@ -441,7 +441,7 @@ void _msgpack_buffer_expand(msgpack_buffer_t* b, const char* data, size_t length
         /* allocate new chunk */
         _msgpack_buffer_add_new_chunk(b);
 
-        char* mem = _msgpack_buffer_chunk_malloc(b, &b->tail, length, &capacity);
+        char* mem = (char*)_msgpack_buffer_chunk_malloc(b, &b->tail, length, &capacity);
         //printf("tail malloc()ed capacity %lu\n", capacity);
 
         char* last = mem;
@@ -464,7 +464,7 @@ void _msgpack_buffer_expand(msgpack_buffer_t* b, const char* data, size_t length
     } else {
         /* realloc malloc()ed chunk or NULL */
         size_t tail_filled = b->tail.last - b->tail.first;
-        char* mem = _msgpack_buffer_chunk_realloc(b, &b->tail,
+        char* mem = (char*)_msgpack_buffer_chunk_realloc(b, &b->tail,
                 b->tail.first, tail_filled+length, &capacity);
         //printf("tail realloc()ed capacity %lu filled=%lu\n", capacity, tail_filled);
 
@@ -651,7 +651,7 @@ size_t _msgpack_buffer_read_from_io_to_string(msgpack_buffer_t* b, VALUE string,
     rb_funcall(b->io, b->io_partial_read_method, 2, LONG2FIX(length), b->io_buffer);
     size_t rl = RSTRING_LEN(b->io_buffer);
 
-    rb_str_buf_cat(string, (const void*)RSTRING_PTR(b->io_buffer), rl);
+    rb_str_buf_cat(string, (const char*)RSTRING_PTR(b->io_buffer), rl);
     return rl;
 }
 

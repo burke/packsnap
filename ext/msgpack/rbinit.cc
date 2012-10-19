@@ -16,10 +16,10 @@
  *    limitations under the License.
  */
 
-#include "buffer_class.h"
-#include "packer_class.h"
-#include "unpacker_class.h"
-#include "core_ext.h"
+#include "buffer_class.hh"
+#include "packer_class.hh"
+#include "unpacker_class.hh"
+#include "core_ext.hh"
 
 #ifdef COMPAT_HAVE_ENCODING
 /* see compat.h*/
@@ -29,6 +29,7 @@ int s_enc_usascii;
 VALUE s_enc_utf8_value;
 #endif
 
+extern "C"
 void Init_msgpack(void)
 {
 #ifdef COMPAT_HAVE_ENCODING

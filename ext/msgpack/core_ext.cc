@@ -16,9 +16,9 @@
  *    limitations under the License.
  */
 
-#include "core_ext.h"
+#include "core_ext.hh"
 #include "packer.h"
-#include "packer_class.h"
+#include "packer_class.hh"
 
 static inline VALUE delegete_to_pack(int argc, VALUE* argv, VALUE self)
 {
@@ -113,17 +113,18 @@ static VALUE Symbol_to_msgpack(int argc, VALUE* argv, VALUE self)
     return packer;
 }
 
+extern "C"
 void MessagePack_core_ext_module_init()
 {
-    rb_define_method(rb_cNilClass,   "to_msgpack", NilClass_to_msgpack, -1);
-    rb_define_method(rb_cTrueClass,  "to_msgpack", TrueClass_to_msgpack, -1);
-    rb_define_method(rb_cFalseClass, "to_msgpack", FalseClass_to_msgpack, -1);
-    rb_define_method(rb_cFixnum, "to_msgpack", Fixnum_to_msgpack, -1);
-    rb_define_method(rb_cBignum, "to_msgpack", Bignum_to_msgpack, -1);
-    rb_define_method(rb_cFloat,  "to_msgpack", Float_to_msgpack, -1);
-    rb_define_method(rb_cString, "to_msgpack", String_to_msgpack, -1);
-    rb_define_method(rb_cArray,  "to_msgpack", Array_to_msgpack, -1);
-    rb_define_method(rb_cHash,   "to_msgpack", Hash_to_msgpack, -1);
-    rb_define_method(rb_cSymbol, "to_msgpack", Symbol_to_msgpack, -1);
+    rb_define_method(rb_cNilClass,   "to_msgpack", (VALUE (*)(...))NilClass_to_msgpack, -1);
+    rb_define_method(rb_cTrueClass,  "to_msgpack", (VALUE (*)(...))TrueClass_to_msgpack, -1);
+    rb_define_method(rb_cFalseClass, "to_msgpack", (VALUE (*)(...))FalseClass_to_msgpack, -1);
+    rb_define_method(rb_cFixnum, "to_msgpack", (VALUE (*)(...))Fixnum_to_msgpack, -1);
+    rb_define_method(rb_cBignum, "to_msgpack", (VALUE (*)(...))Bignum_to_msgpack, -1);
+    rb_define_method(rb_cFloat,  "to_msgpack", (VALUE (*)(...))Float_to_msgpack, -1);
+    rb_define_method(rb_cString, "to_msgpack", (VALUE (*)(...))String_to_msgpack, -1);
+    rb_define_method(rb_cArray,  "to_msgpack", (VALUE (*)(...))Array_to_msgpack, -1);
+    rb_define_method(rb_cHash,   "to_msgpack", (VALUE (*)(...))Hash_to_msgpack, -1);
+    rb_define_method(rb_cSymbol, "to_msgpack", (VALUE (*)(...))Symbol_to_msgpack, -1);
 }
 

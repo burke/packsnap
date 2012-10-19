@@ -19,8 +19,8 @@
 #include "compat.h"
 #include "ruby.h"
 #include "packer.h"
-#include "packer_class.h"
-#include "buffer_class.h"
+#include "packer_class.hh"
+#include "buffer_class.hh"
 
 VALUE cMessagePack_Packer;
 
@@ -192,6 +192,7 @@ static VALUE Packer_write_to(VALUE self, VALUE io)
 //    return self;
 //}
 
+extern "C"
 VALUE MessagePack_pack(int argc, VALUE* argv)
 {
     // TODO options
@@ -245,6 +246,7 @@ static VALUE MessagePack_pack_module_method(int argc, VALUE* argv, VALUE mod)
     return MessagePack_pack(argc, argv);
 }
 
+extern "C"
 void MessagePack_Packer_module_init(VALUE mMessagePack)
 {
     s_to_msgpack = rb_intern("to_msgpack");
@@ -252,25 +254,25 @@ void MessagePack_Packer_module_init(VALUE mMessagePack)
 
     cMessagePack_Packer = rb_define_class_under(mMessagePack, "Packer", rb_cObject);
 
-    rb_define_alloc_func(cMessagePack_Packer, Packer_alloc);
+    rb_define_alloc_func(cMessagePack_Packer, (VALUE (*)(VALUE))Packer_alloc);
 
-    rb_define_method(cMessagePack_Packer, "initialize", Packer_initialize, -1);
-    rb_define_method(cMessagePack_Packer, "buffer", Packer_buffer, 0);
-    rb_define_method(cMessagePack_Packer, "write", Packer_write, 1);
+    rb_define_method(cMessagePack_Packer, "initialize", (VALUE (*)(...))Packer_initialize, -1);
+    rb_define_method(cMessagePack_Packer, "buffer", (VALUE (*)(...))Packer_buffer, 0);
+    rb_define_method(cMessagePack_Packer, "write", (VALUE (*)(...))Packer_write, 1);
     rb_define_alias(cMessagePack_Packer, "pack", "write");
-    rb_define_method(cMessagePack_Packer, "write_nil", Packer_write_nil, 0);
-    rb_define_method(cMessagePack_Packer, "write_array_header", Packer_write_array_header, 1);
-    rb_define_method(cMessagePack_Packer, "write_map_header", Packer_write_map_header, 1);
-    rb_define_method(cMessagePack_Packer, "flush", Packer_flush, 0);
+    rb_define_method(cMessagePack_Packer, "write_nil", (VALUE (*)(...))Packer_write_nil, 0);
+    rb_define_method(cMessagePack_Packer, "write_array_header", (VALUE (*)(...))Packer_write_array_header, 1);
+    rb_define_method(cMessagePack_Packer, "write_map_header", (VALUE (*)(...))Packer_write_map_header, 1);
+    rb_define_method(cMessagePack_Packer, "flush", (VALUE (*)(...))Packer_flush, 0);
 
     /* delegation methods */
-    rb_define_method(cMessagePack_Packer, "clear", Packer_clear, 0);
-    rb_define_method(cMessagePack_Packer, "size", Packer_size, 0);
-    rb_define_method(cMessagePack_Packer, "empty?", Packer_empty_p, 0);
-    rb_define_method(cMessagePack_Packer, "write_to", Packer_write_to, 1);
-    rb_define_method(cMessagePack_Packer, "to_str", Packer_to_str, 0);
+    rb_define_method(cMessagePack_Packer, "clear", (VALUE (*)(...))Packer_clear, 0);
+    rb_define_method(cMessagePack_Packer, "size", (VALUE (*)(...))Packer_size, 0);
+    rb_define_method(cMessagePack_Packer, "empty?", (VALUE (*)(...))Packer_empty_p, 0);
+    rb_define_method(cMessagePack_Packer, "write_to", (VALUE (*)(...))Packer_write_to, 1);
+    rb_define_method(cMessagePack_Packer, "to_str", (VALUE (*)(...))Packer_to_str, 0);
     rb_define_alias(cMessagePack_Packer, "to_s", "to_str");
-    rb_define_method(cMessagePack_Packer, "to_a", Packer_to_a, 0);
+    rb_define_method(cMessagePack_Packer, "to_a", (VALUE (*)(...))Packer_to_a, 0);
     //rb_define_method(cMessagePack_Packer, "append", Packer_append, 1);
     //rb_define_alias(cMessagePack_Packer, "<<", "append");
 
@@ -279,7 +281,7 @@ void MessagePack_Packer_module_init(VALUE mMessagePack)
     //Data_Get_Struct(s_packer_value, msgpack_packer_t, s_packer);
 
     /* MessagePack.pack(x) */
-    rb_define_module_function(mMessagePack, "pack", MessagePack_pack_module_method, -1);
-    rb_define_module_function(mMessagePack, "dump", MessagePack_dump_module_method, -1);
+    rb_define_module_function(mMessagePack, "pack", (VALUE (*)(...))MessagePack_pack_module_method, -1);
+    rb_define_module_function(mMessagePack, "dump", (VALUE (*)(...))MessagePack_dump_module_method, -1);
 }
 

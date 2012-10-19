@@ -21,7 +21,7 @@
 void msgpack_rmem_init(msgpack_rmem_t* pm)
 {
     memset(pm, 0, sizeof(msgpack_rmem_t));
-    pm->head.pages = malloc(MSGPACK_RMEM_PAGE_SIZE * 32);
+    pm->head.pages = (char*)malloc(MSGPACK_RMEM_PAGE_SIZE * 32);
     pm->head.mask = 0xffffffff;  /* all bit is 1 = available */
 }
 
@@ -56,7 +56,7 @@ void* _msgpack_rmem_alloc2(msgpack_rmem_t* pm)
         size_t capacity = c - pm->array_first;
         size_t length = last - pm->array_first;
         capacity = (capacity == 0) ? 8 : capacity * 2;
-        msgpack_rmem_chunk_t* array = realloc(pm->array_first, capacity * sizeof(msgpack_rmem_chunk_t));
+        msgpack_rmem_chunk_t* array = (msgpack_rmem_chunk_t*)realloc(pm->array_first, capacity * sizeof(msgpack_rmem_chunk_t));
         pm->array_first = array;
         pm->array_last = array + length;
         pm->array_end = array + capacity;
@@ -71,7 +71,7 @@ void* _msgpack_rmem_alloc2(msgpack_rmem_t* pm)
     *c = tmp;
 
     pm->head.mask = 0xffffffff & (~1);  /* first chunk is already allocated */
-    pm->head.pages = malloc(MSGPACK_RMEM_PAGE_SIZE * 32);
+    pm->head.pages = (char*)malloc(MSGPACK_RMEM_PAGE_SIZE * 32);
 
     return pm->head.pages;
 }
