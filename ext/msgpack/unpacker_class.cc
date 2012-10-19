@@ -16,6 +16,8 @@
  *    limitations under the License.
  */
 
+#include "snappy.h"
+#include "core_ext.hh"
 #include "unpacker.hh"
 #include "unpacker_class.hh"
 #include "buffer_class.hh"
@@ -269,6 +271,25 @@ static VALUE Unpacker_feed_each(VALUE self, VALUE data)
     return Unpacker_each(self);
 }
 
+static VALUE
+_unsnappify(VALUE src)
+{
+    VALUE dst;
+    size_t output_length;
+
+    if (!snappy::GetUncompressedLength(RSTRING_PTR(src), RSTRING_LEN(src), &output_length)) {
+        rb_raise(rb_ePacksnap, "packsnap::GetUncompressedLength");
+    }
+
+    dst = rb_str_new(NULL, output_length);
+
+    if (!snappy::RawUncompress(RSTRING_PTR(src), RSTRING_LEN(src), RSTRING_PTR(dst))) {
+        rb_raise(rb_ePacksnap, "packsnap::RawUncompress");
+    }
+
+    return dst;
+}
+
 VALUE MessagePack_unpack(int argc, VALUE* argv)
 {
     VALUE src;
@@ -285,6 +306,10 @@ VALUE MessagePack_unpack(int argc, VALUE* argv)
     if(rb_type(src) != T_STRING) {
         io = src;
         src = Qnil;
+    }
+
+    if (src != Qnil) {
+      src = _unsnappify(src);
     }
 
     // TODO create an instance if io is set?; thread safety

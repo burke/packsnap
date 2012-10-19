@@ -20,6 +20,9 @@
 
 #include "compat.h"
 
+static VALUE rb_mPacksnap;
+static VALUE rb_ePacksnap;
+
 extern "C"
 void MessagePack_core_ext_module_init();
 

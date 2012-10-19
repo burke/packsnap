@@ -16,6 +16,7 @@
  *    limitations under the License.
  */
 
+#include "snappy.h"
 #include "buffer.hh"
 #include "rmem.h"
 
@@ -517,10 +518,26 @@ static inline VALUE _msgpack_buffer_chunk_as_string(msgpack_buffer_chunk_t* c)
     return rb_str_new(c->first, chunk_size);
 }
 
+static VALUE
+_msgpack_buffer_snappify_string(VALUE src)
+{
+    VALUE  dst;
+    size_t  output_length;
+
+    output_length = snappy::MaxCompressedLength(RSTRING_LEN(src));
+
+    dst = rb_str_new(NULL, output_length);
+
+    snappy::RawCompress(RSTRING_PTR(src), RSTRING_LEN(src), RSTRING_PTR(dst), &output_length);
+    rb_str_resize(dst, output_length);
+
+    return dst;
+}
+
 VALUE msgpack_buffer_all_as_string(msgpack_buffer_t* b)
 {
     if(b->head == &b->tail) {
-        return _msgpack_buffer_head_chunk_as_string(b);
+        return _msgpack_buffer_snappify_string(_msgpack_buffer_head_chunk_as_string(b));
     }
 
     size_t length = msgpack_buffer_all_readable_size(b);
@@ -539,7 +556,7 @@ VALUE msgpack_buffer_all_as_string(msgpack_buffer_t* b)
         memcpy(buffer, c->first, avail);
 
         if(length <= avail) {
-            return string;
+            return _msgpack_buffer_snappify_string(string);
         }
         buffer += avail;
         length -= avail;

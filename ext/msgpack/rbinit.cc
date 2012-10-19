@@ -39,6 +39,9 @@ void Init_msgpack(void)
     s_enc_utf8_value = rb_enc_from_encoding(rb_utf8_encoding());
 #endif
 
+    rb_mPacksnap = rb_define_module("Packsnap");
+    rb_ePacksnap = rb_define_class_under(rb_mPacksnap, "Error", rb_eStandardError);
+
     VALUE mMessagePack = rb_define_module("MessagePack");
 
     MessagePack_Buffer_module_init(mMessagePack);
