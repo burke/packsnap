@@ -23,13 +23,13 @@ end
 
 desc 'Generate YARD document'
 YARD::Rake::YardocTask.new(:doc) do |t|
-  t.files   = ['lib/msgpack/version.rb','doclib/**/*.rb']
+  t.files   = ['lib/packsnap/version.rb','doclib/**/*.rb']
   t.options = []
   t.options << '--debug' << '--verbose' if $trace
 end
 
 def create_gemspec(platform, extra_globs, remove_globs)
-  spec = eval(File.read('msgpack.gemspec'))
+  spec = eval(File.read('packsnap.gemspec'))
 
   extra_globs.each {|glob| spec.files += Dir[glob] }
   remove_globs.each {|glob| spec.files -= Dir[glob] }
@@ -70,19 +70,19 @@ task "gem" do
   #if RUBY_PLATFORM =~ /java/
   #  Rake::Task["gem:java"].invoke
   #else
-    create_gem(nil, ["lib/msgpack/**/*.{so,bundle}"], ["ext/**/*"])
+    create_gem(nil, ["lib/packsnap/**/*.{so,bundle}"], ["ext/**/*"])
   #end
 end
 
 desc "Create precompiled gem package"
 task "gem:build" do
-  config = YAML.load_file("msgpack.build.yml")
+  config = YAML.load_file("packsnap.build.yml")
 
   platform = config['platform']
   archs = []
 
   begin
-    FileUtils.rm_rf Dir["lib/msgpack/*-*"]
+    FileUtils.rm_rf Dir["lib/packsnap/*-*"]
 
     config['versions'].each {|ver|
       ruby = ver.delete('ruby')
@@ -91,19 +91,19 @@ task "gem:build" do
       ruby_version = `'#{ruby}' -rrbconfig -e "puts RbConfig::CONFIG['ruby_version']"`.strip
       vpath = "#{arch}/#{ruby_version}"
 
-      run_command "cd ext/msgpack && '#{ruby}' extconf.rb && make clean && make", env
+      run_command "cd ext/packsnap && '#{ruby}' extconf.rb && make clean && make", env
 
-      path = Dir['ext/msgpack/msgpack.{so,bundle}'].first
-      FileUtils.mkdir_p("lib/msgpack/#{vpath}")
-      FileUtils.cp(path, "lib/msgpack/#{vpath}/")
+      path = Dir['ext/packsnap/packsnap.{so,bundle}'].first
+      FileUtils.mkdir_p("lib/packsnap/#{vpath}")
+      FileUtils.cp(path, "lib/packsnap/#{vpath}/")
 
       archs << arch
     }
 
-    create_gem(platform, ["lib/msgpack/**/*.{so,bundle}"], ["ext/**/*"])
+    create_gem(platform, ["lib/packsnap/**/*.{so,bundle}"], ["ext/**/*"])
 
   ensure
-    FileUtils.rm_rf Dir["lib/msgpack/*-*"]
+    FileUtils.rm_rf Dir["lib/packsnap/*-*"]
   end
 end
 
@@ -111,14 +111,14 @@ end
 #  Rake::Task["compile:java"].invoke
 #
 #  begin
-#    FileUtils.mkdir_p 'lib/msgpack/java'
+#    FileUtils.mkdir_p 'lib/packsnap/java'
 #    FileUtils.cp Dir["ext/java/*.jar"], "lib/"
-#    FileUtils.cp "ext/java/msgpack.jar", "lib/msgpack"
+#    FileUtils.cp "ext/java/packsnap.jar", "lib/packsnap"
 #
-#    create_gem('java', [], ["ext/msgpack/**/*"])
+#    create_gem('java', [], ["ext/packsnap/**/*"])
 #  ensure
 #    FileUtils.rm_rf "ext/java/build"
-#    FileUtils.rm_rf "lib/msgpack/java"
+#    FileUtils.rm_rf "lib/packsnap/java"
 #    FileUtils.rm_rf Dir["lib/*.jar"]
 #  end
 #end
@@ -128,7 +128,7 @@ task "compile" do
   #  Rake::Task["compile:java"].invoke
   #else
     ruby = 'ruby'  # TODO use self
-    run_command "cd ext/msgpack && '#{ruby}' extconf.rb && make clean && make"
+    run_command "cd ext/packsnap && '#{ruby}' extconf.rb && make clean && make"
   #end
 end
 
@@ -137,12 +137,12 @@ end
 #  begin
 #    jruby_home = RbConfig::CONFIG['prefix']
 #    classpath = ["#{jruby_home}/lib/jruby.jar"] + Dir['*.jar']
-#    files = Dir['msgpack/**/*.java']
+#    files = Dir['packsnap/**/*.java']
 #
 #    FileUtils.rm_rf "ext/java/build"
 #    FileUtils.mkdir_p 'build'
 #    run_command "javac -cp '#{classpath.join(':')}' -d build #{files.join(' ')}"
-#    run_command "jar cvf msgpack.jar -C build/ ."
+#    run_command "jar cvf packsnap.jar -C build/ ."
 #  ensure
 #    Dir.chdir('../..')
 #  end

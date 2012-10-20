@@ -90,5 +90,5 @@ snappy.h
 end
 
 have_library 'stdc++'
-create_makefile('msgpack/msgpack')
+create_makefile('packsnap/packsnap')
 
