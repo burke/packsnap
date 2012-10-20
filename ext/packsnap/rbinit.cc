@@ -16,6 +16,8 @@
  *    limitations under the License.
  */
 
+#include "packsnap.h"
+
 #include "buffer_class.hh"
 #include "packer_class.hh"
 #include "unpacker_class.hh"
@@ -27,9 +29,6 @@ int s_enc_ascii8bit;
 int s_enc_usascii;
 VALUE s_enc_utf8_value;
 #endif
-
-static VALUE rb_mPacksnap;
-static VALUE rb_ePacksnap;
 
 extern "C"
 void Init_packsnap(void)

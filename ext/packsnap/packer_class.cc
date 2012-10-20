@@ -16,6 +16,7 @@
  *    limitations under the License.
  */
 
+#include "packsnap.h"
 #include "compat.h"
 #include "ruby.h"
 #include "packer.h"

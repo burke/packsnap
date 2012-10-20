@@ -16,6 +16,7 @@
  *    limitations under the License.
  */
 
+#include "packsnap.h"
 #include "snappy.h"
 #include "unpacker.hh"
 #include "unpacker_class.hh"
