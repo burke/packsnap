@@ -17,7 +17,6 @@
  */
 
 #include "snappy.h"
-#include "core_ext.hh"
 #include "unpacker.hh"
 #include "unpacker_class.hh"
 #include "buffer_class.hh"

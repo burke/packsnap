@@ -19,7 +19,6 @@
 #include "buffer_class.hh"
 #include "packer_class.hh"
 #include "unpacker_class.hh"
-#include "core_ext.hh"
 
 #ifdef COMPAT_HAVE_ENCODING
 /* see compat.h*/
@@ -29,8 +28,11 @@ int s_enc_usascii;
 VALUE s_enc_utf8_value;
 #endif
 
+static VALUE rb_mPacksnap;
+static VALUE rb_ePacksnap;
+
 extern "C"
-void Init_msgpack(void)
+void Init_packsnap(void)
 {
 #ifdef COMPAT_HAVE_ENCODING
     s_enc_ascii8bit = rb_ascii8bit_encindex();
@@ -47,6 +49,5 @@ void Init_msgpack(void)
     MessagePack_Buffer_module_init(mMessagePack);
     MessagePack_Packer_module_init(mMessagePack);
     MessagePack_Unpacker_module_init(mMessagePack);
-    MessagePack_core_ext_module_init();
 }
 
