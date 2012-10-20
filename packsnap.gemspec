@@ -4,8 +4,8 @@ require 'packsnap/version'
 Gem::Specification.new do |s|
   s.name = "packsnap"
   s.version = Packsnap::VERSION
-  s.summary = "MessagePack, a binary-based efficient data interchange format."
-  s.description = %q{MessagePack is a binary-based efficient object serialization library. It enables to exchange structured objects between many languages like JSON. But unlike JSON, it is very fast and small.}
+  s.summary = "Compressed Serialization using MessagePack and Snappy."
+  s.description = %q{MessagePack is a binary-based efficient object serialization library. Snappy is a speed-oriented compression library. Packsnap is the composition of these libraries}
   s.author = "Burke Libbey"
   s.email = "burke@libbey.me"
   s.homepage = "https://github.com/burke/packsnap"

@@ -1,26 +1,12 @@
 
-= MessagePack
+= Packsnap
 
-MessagePack is an efficient binary serialization format.
-It lets you exchange data among multiple languages like JSON but it's faster and smaller.
-For example, small integers (like flags or error code) are encoded into a single byte,
-and typical short strings only require an extra byte in addition to the strings themselves.
-
-If you ever wished to use JSON for convenience (storing an image with metadata) but could
-not for technical reasons (encoding, size, speed...), MessagePack is a perfect replacement.
-
-    require 'msgpack'
-    msg = [1,2,3].to_msgpack  #=> "\x93\x01\x02\x03"
-    MessagePack.unpack(msg)   #=> [1,2,3]
-
-Use RubyGems to install:
-
-    gem install msgpack
+TODO
 
 
 == Copyright
 
-Author::    FURUHASHI Sadayuki <frsyuki@gmail.com>
-Copyright:: Copyright (c) 2008-2012 FURUHASHI Sadayuki
+MessagePack code copyright 2012 FURUHASHI Sadayuki
+Additions copyright Burke Libbey
 License::   Apache License, Version 2.0
 
